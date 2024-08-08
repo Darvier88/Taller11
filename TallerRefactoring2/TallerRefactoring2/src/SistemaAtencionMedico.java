@@ -1,12 +1,14 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 public class SistemaAtencionMedico {
     private List<Paciente> pacientes;
     private List<Medico> medicos;
     private List<ServicioMedico> serviciosMedicos;
     private static final double DESCUENTO_ADULTO_MAYOR = 0.25;
+    private static final int TERCERA_EDAD=65;
 
     public SistemaAtencionMedico() {
         this.pacientes = new ArrayList<>();
@@ -54,34 +56,31 @@ public class SistemaAtencionMedico {
     public double calcularValorFinalConsulta(Consulta consulta){
     	double costoConsulta = consulta.getServicioMedico().getCosto();
         double valorARestar = 0;
-        if (consulta.getPaciente().getEdad() >= 65) {
+        if (consulta.getPaciente().getEdad() >= TERCERA_EDAD) {
             valorARestar = costoConsulta * DESCUENTO_ADULTO_MAYOR;
         }
         return costoConsulta - valorARestar;
     }
 
     // se puede parametrizar (obtener...)
-    public Paciente obtenerPaciente(String nombrePaciente) {
-        for(Paciente paciente : pacientes){
-            if (paciente.getNombre().equals(nombrePaciente))
-                return paciente;
+    public <T> T obtenerEntidadPorNombre(List<T> lista, String nombre, Function<T, String> nombreExtractor) {
+        for (T entidad : lista) {
+            if (nombreExtractor.apply(entidad).equals(nombre)) {
+                return entidad;
+            }
         }
         return null;
+    }
+
+    public Paciente obtenerPaciente(String nombrePaciente) {
+        return obtenerEntidadPorNombre(pacientes, nombrePaciente, Paciente::getNombre);
     }
 
     public ServicioMedico obtenerServicioMedico(String nombreServicio) {
-        for(ServicioMedico servicioMedico : serviciosMedicos){
-            if (servicioMedico.getNombre().equals(nombreServicio))
-                return servicioMedico;
-        }
-        return null;
+        return obtenerEntidadPorNombre(serviciosMedicos, nombreServicio, ServicioMedico::getNombre);
     }
 
     public Medico obtenerMedico(String nombreMedico) {
-        for(Medico medico : medicos){
-            if (medico.getNombre().equals(nombreMedico))
-                return medico;
-        }
-        return null;
+        return obtenerEntidadPorNombre(medicos, nombreMedico, Medico::getNombre);
     }
 }
