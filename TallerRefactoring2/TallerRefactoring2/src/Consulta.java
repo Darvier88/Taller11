@@ -1,10 +1,10 @@
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Consulta {
-    public int dia;
-    public int mes;
-    public int año;
-    private String hora;
+    private LocalDateTime fechaHora;
     private Paciente paciente;
     private Medico medico;
     private ServicioMedico servicioMedico;
@@ -13,23 +13,20 @@ public class Consulta {
     private String tratamiento;
     private List<String> examenesMedicos;
 
-    public Consulta(int dia, int mes, int año, String hora, Paciente paciente, Medico medico, ServicioMedico servicioMedico, String diagnostico, String tratamiento, List<String> examenesMedicos) {
-        this.dia = dia;
-        this.mes = mes;
-        this.año = año;
-        this.hora = hora;
+    public Consulta(int dia, int mes, int año, int hora, Paciente paciente, Medico medico, ServicioMedico servicioMedico, String diagnostico, String tratamiento, List<String> examenesMedicos) {
+        this.fechaHora = LocalDateTime.of(año, mes, dia, hora, 0);
         this.servicioMedico = servicioMedico;
         this.paciente = paciente;
         this.medico = medico;
+        this.examenesMedicos = new ArrayList<>(examenesMedicos);
         this.realizada = false;
     }
 
-    public String getHora() {
-        return hora;
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
     }
-
-    public void setHora(String hora) {
-        this.hora = hora;
+    public void setFechaHora(int dia, int mes, int año, int hora, int minuto) {
+        this.fechaHora = LocalDateTime.of(año, mes, dia, hora, minuto);
     }
 
     public Paciente getPaciente() {
@@ -73,11 +70,14 @@ public class Consulta {
     }
 
     public List<String> getExamenesMedicos() {
-        return examenesMedicos;
+        return Collections.unmodifiableList(examenesMedicos);
     }
 
-    public void setExamenesMedicos(List<String> examenesMedicos) {
-        this.examenesMedicos = examenesMedicos;
+    public void addExamenMedico(String examenMedico) { 
+        this.examenesMedicos.add(examenMedico); 
+    } 
+    public void removeExamenMedico(String examenMedico) { 
+        this.examenesMedicos.remove(examenMedico); 
     }
 
     public ServicioMedico getServicioMedico() {
