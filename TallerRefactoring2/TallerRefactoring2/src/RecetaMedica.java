@@ -1,21 +1,23 @@
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RecetaMedica {
     private LocalDateTime fechaHora;
     private Paciente paciente;
     private Medico medico;
-    private List<String> medicamentos;
+    private List<Medicamento> medicamentos;
 
-    public RecetaMedica(LocalDateTime fechaHora, Paciente paciente, Medico medico, List<String> medicamentos) {
-        this.fechaHora = fechaHora;
-        this.paciente = paciente;
-        this.medico = medico;
-        this.medicamentos = medicamentos;
+    public RecetaMedica(LocalDateTime fechaHora, Paciente paciente, Medico medico, List<Medicamento> medicamentos) {
+        this.setFechaHora(fechaHora);
+        this.setPaciente(paciente);
+        this.setMedico(medico);
+        this.setMedicamentos(medicamentos);
     }
 
-    public void agregarMedicamento(String medicamento) {
-        medicamentos.add(medicamento);
+    public void agregarMedicamento(Medicamento medicamento) {
+        this.medicamentos.add(medicamento);
     }
 
     public LocalDateTime getFechaHora() {
@@ -42,11 +44,12 @@ public class RecetaMedica {
         this.medico = medico;
     }
 
-    public List<String> getMedicamentos() {
-        return medicamentos;
+    public List<Medicamento> getMedicamentos() {
+        return Collections.unmodifiableList(medicamentos);
     }
 
-    public void setMedicamentos(List<String> medicamentos) {
-        this.medicamentos = medicamentos;
+    public void setMedicamentos(List<Medicamento> medicamentos) {
+        this.medicamentos = new ArrayList<>(medicamentos);
     }
 }
+
